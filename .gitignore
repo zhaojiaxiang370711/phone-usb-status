@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.venv/
+config.local.json
+.env
+.env.*
+*.log
+*.pcap
+*.img
+*.bin
+*.pem
+*.key
