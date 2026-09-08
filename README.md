@@ -1,5 +1,11 @@
 # Phone USB Status
 
+[![Tests](https://github.com/zhaojiaxiang370711/phone-usb-status/actions/workflows/tests.yml/badge.svg)](https://github.com/zhaojiaxiang370711/phone-usb-status/actions/workflows/tests.yml)
+
+**开源的 Linux 本机手机连接状态面板。** 当前针对小米 11 Pro（mars）开发，采用 [MIT 许可证](LICENSE)。
+
+A local-only Linux dashboard for phone development. Tracks Qualcomm EDL 9008, ADB, Fastboot and mars RAM Linux USB enumeration. Built with Python standard library and vanilla JavaScript. No flashing or reboot commands. See [English quick start](README.en.md).
+
 为小米 11 Pro（mars）Linux 适配开发提取的本机 USB 状态面板。Python 标准库后端与原生 HTML/CSS/JavaScript 前端，无第三方 Python 依赖。
 
 ## 功能
@@ -14,6 +20,8 @@
 要求 Linux、Python 3.10+，ADB/Fastboot 命令可用（Ubuntu 对应 `adb`、`fastboot` 包），当前用户具备必要的 USB 访问权限。
 
 ```bash
+git clone https://github.com/zhaojiaxiang370711/phone-usb-status.git
+cd phone-usb-status
 cp config.example.json config.local.json
 chmod 600 config.local.json
 # 编辑 config.local.json，填写自己的 ADB/Fastboot 序列号和 EDL 芯片标识
@@ -49,3 +57,24 @@ node --check app.js
 ```
 
 独立仓库只包含页面、服务、测试和配置示例，不包含手机固件、分区备份、真实设备配置或历史操作日志。
+
+## 兼容状态
+
+| 功能 | 范围 |
+| --- | --- |
+| 主机 | Linux，依赖 `/sys/bus/usb/devices`；Windows/macOS 尚未支持 |
+| ADB / Fastboot | 按配置中的目标序列号匹配 |
+| 9008 / EDL | Qualcomm `05c6:9008`，按 USB product 的芯片标识核对 |
+| RAM Linux | 当前仅支持包含 mars 标识的诊断 USB；不是通用存活检测 |
+| 自动测试 | 使用虚构设备数据，无需真实手机，不运行刷写操作 |
+
+## 常见问题
+
+- **工具缺失显示未知**：检查 `adb devices` 与 `fastboot devices` 是否可运行。工具执行失败不等同于手机断开。
+- **9008 身份待确认**：核对本地芯片标识、是否连接了多台 EDL 设备；不要取消身份检查。
+- **权限不足**：按发行版及设备厂商说明配置 USB/udev 权限，不建议用全局可写 USB 权限或长期以 root 运行替代。
+- **克隆后无法启动**：必须先编辑 `config.local.json`；真实配置不会随仓库分发。
+
+## 贡献与许可证
+
+见 [贡献说明](CONTRIBUTING.md)、[安全说明](SECURITY.md) 和 [MIT 许可证](LICENSE)。欢迎补充经过测试的机型配置、界面改进与兼容性记录。
